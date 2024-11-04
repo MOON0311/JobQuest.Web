@@ -1,0 +1,48 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+<ul class="navbar-nav">
+    @if (Context.Session.GetString("IsLoggedIn") == "true")
+    {
+        var roleId = Context.Session.GetInt32("RoleId");
+
+        @if (roleId == 1) // Admin
+        {
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-controller="Account" asp-action="List">Manage Users</a>
+            </li>
+        }
+        else if (roleId == 2) // HR
+        {
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-controller="JobPost" asp-action="Add">Post Job</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-controller="JobPost" asp-action="ViewPostedJobs">Manage Posts</a>
+            </li>
+        }
+        else if (roleId == 3) // JobSeeker
+        {
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-controller="Application" asp-action="List">Applications</a>
+            </li>
+        }
+
+        <li class="nav-item">
+            <form class="form-inline" asp-controller="Account" asp-action="Logout">
+                <button type="submit" class="nav-link btn btn-link text-dark">Logout</button>
+            </form>
+        </li>
+    }
+    else
+    {
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-controller="Account" asp-action="Register">Register</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-controller="Account" asp-action="Login">Login</a>
+        </li>
+    }
+</ul>
+

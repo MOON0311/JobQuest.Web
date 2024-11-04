@@ -1,0 +1,86 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@model List<JobQuest.Web.Models.JobPostViewModel>
+
+@{
+    var successMessage = TempData["SuccessMessage"] as string;
+}
+
+<h1>Your Posted Jobs</h1>
+
+<form asp-controller="JobPost" asp-action="ViewPostedJobs" method="get" class="form-inline">
+    <div class="form-group">
+        <input type="text" name="searchTerm" class="form-control" placeholder="Search by Title or Description" />
+    </div>
+    <div class="form-group">
+        <select name="jobType" class="form-control">
+            <option value="">All Job Types</option>
+            <option value="FullTime">Full Time</option>
+            <option value="PartTime">Part Time</option>
+            <option value="Freelancer">Freelancer</option>
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Search</button>
+</form>
+
+@if (!Model.Any())
+{
+    <p>No posted jobs found.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Posted Date</th>
+                <th>Actions</th> <!-- Optional for edit/delete actions -->
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var job in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(m => job.Title)</td>
+                    <td>@Html.DisplayFor(m => job.Description)</td>
+                    <td>@Html.DisplayFor(m => job.PostedDate)</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@job.JobPostId" class="btn btn-primary">Edit</a>
+
+                        <form asp-action="Delete" asp-controller="JobPost" method="post" style="display:inline;">
+                            <input type="hidden" name="JobPostId" value="@job.JobPostId" />
+                            <input type="hidden" name="Title" value="@job.Title" />
+                            <input type="hidden" name="CompanyName" value="@job.CompanyName" />
+                            <input type="hidden" name="Description" value="@job.Description" />
+                            <input type="hidden" name="JobType" value="@job.JobType" />
+                            <input type="hidden" name="Location" value="@job.Location" />
+                            <input type="hidden" name="Salary" value="@job.Salary" />
+                            <input type="hidden" name="PostedDate" value="@job.PostedDate" />
+                            <input type="hidden" name="IsActive" value="@job.IsActive" />
+
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+
+                        <a asp-action="ViewApplicants" asp-route-jobPostId="@job.JobPostId" class="btn btn-primary">Applicants</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            var successMessage = '@successMessage';
+            if (successMessage) {
+                alert(successMessage);
+            }
+        });
+    </script>
+}

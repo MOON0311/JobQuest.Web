@@ -1,0 +1,23 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="container">
+    <main role="main" class="pb-3">
+        @if (Context.Session.GetString("IsLoggedIn") == "true")
+        {
+            <!-- User is logged in, redirect to JobPost Index -->
+            <script>
+                window.location.href = '@Url.Action("Index", "JobPost")';
+            </script>
+        }
+        else
+        {
+            <!-- User is not logged in, display login/register message -->
+            <div class="text-center">
+                <h2>Welcome to JobQuest</h2>
+                <p>Please <a asp-controller="Account" asp-action="Login">Login</a> or <a asp-controller="Account" asp-action="Register">Register</a> to continue.</p>
+            </div>
+        }
+    </main>
+</div>

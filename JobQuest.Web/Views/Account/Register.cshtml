@@ -1,0 +1,74 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@model JobQuest.Web.Models.Registration
+
+<h2 class="text-center mb-3">Register Account</h2>
+<p class="text-center">HR Registration please contact <a href="mailto:xxx@gmail.com" class="text-primary">xxx@gmail.com</a> for assistance.</p>
+
+<div class="d-flex justify-content-center align-items-center vh-80">
+    <form asp-action="Register" method="post" class="w-25">
+
+        <input type="hidden" asp-for="RoleId" value="3" />
+
+        <div class="mb-3">
+            <label class="form-label" asp-for="UserName"></label>
+            <input class="form-control" asp-for="UserName" required/>
+            <span asp-validation-for="UserName"></span>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" asp-for="Password"></label>
+            <input class="form-control" asp-for="Password" type="password" required minlength="8"/>
+            <span asp-validation-for="Password"></span>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Confirm Password</label>
+            <input class="form-control" type="password" id="ConfirmPassword" required minlength="8"/>
+            <span id="confirmPasswordError" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" asp-for="FirstName"></label>
+            <input class="form-control" asp-for="FirstName" required/>
+            <span asp-validation-for="FirstName"></span>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" asp-for="LastName"></label>
+            <input class="form-control" asp-for="LastName" required/>
+            <span asp-validation-for="LastName"></span>
+        </div>
+
+        <div class="mt-b">
+            <label class="form-label" asp-for="Email"></label>
+            <input class="form-control" asp-for="Email" required/>
+            <span asp-validation-for="Email"></span>
+        </div>
+
+        <br />
+
+        <button type="submit" class="btn btn-primary w-100">Register</button>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#Password, #ConfirmPassword').on('keyup', function () {
+                var password = $('#Password').val();
+                var confirmPassword = $('#ConfirmPassword').val();
+
+                if (password !== confirmPassword) {
+                    $('#confirmPasswordError').text('Passwords do not match.');
+                } else {
+                    $('#confirmPasswordError').text('');
+                }
+            });
+        });
+    </script>
+}

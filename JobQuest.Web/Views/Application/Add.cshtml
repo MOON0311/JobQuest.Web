@@ -1,0 +1,76 @@
+﻿@model JobQuest.Web.Models.ApplicationForm
+
+@{
+    var successMessage = TempData["SuccessMessage"] as string;
+}
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+        {
+            <p>@error.ErrorMessage</p>
+        }
+    </div>
+}
+
+<form method="post" enctype="multipart/form-data" asp-controller="Application" asp-action="Add">
+    <h1>@Model.JobPost.Title</h1>
+
+    <p><strong>Company:</strong> @Model.JobPost.CompanyName</p>
+
+    <p><strong>Description:</strong> @Model.JobPost.Description</p>
+
+    <p><strong>Type:</strong> @Model.JobPost.JobType</p>
+
+    <p><strong>Location:</strong> @Model.JobPost.Location</p>
+
+    <p><strong>Salary:</strong> @Model.JobPost.Salary<strong>/hour</strong></p>
+
+    <p><em>Posted on: @Model.JobPost.PostedDate.ToString("d")</em></p>
+
+
+    <hr>
+
+    <h2>Apply for Job</h2>
+
+    <input type="hidden" asp-for="JobPost.JobPostId" />
+    <input type="hidden" asp-for="JobPost.UserId" value="@Model.JobPost.UserId" />
+    <input type="hidden" asp-for="JobPost.Title" value="@Model.JobPost.Title" />
+    <input type="hidden" asp-for="JobPost.CompanyName" value="@Model.JobPost.CompanyName" />
+    <input type="hidden" asp-for="JobPost.Description" value="@Model.JobPost.Description" />
+    <input type="hidden" asp-for="JobPost.JobType" value="@Model.JobPost.JobType" />
+    <input type="hidden" asp-for="JobPost.Location" value="@Model.JobPost.Location" />
+    <input type="hidden" asp-for="JobPost.Salary" value="@Model.JobPost.Salary" />
+    <input type="hidden" asp-for="JobPost.SalaryType" value="@Model.JobPost.SalaryType" />
+    <input type="hidden" asp-for="JobPost.PostedDate" value="@Model.JobPost.PostedDate" />
+
+    <input type="hidden" asp-for="Application.UserId" value="@Model.JobPost.UserId" />
+    <input type="hidden" asp-for="Application.JobPostId" value="@Model.JobPost.JobPostId" />
+    <input type="hidden" asp-for="Application.Status" value="Pending" />
+
+
+    <div class="mt-3">
+        <label class="form-label">Resume</label>
+        <input type="file" name="ResumeFile" class="form-control" asp-for="ResumeFile" required />
+        <span asp-validation-for="ResumeFile" class="text-danger"></span>
+    </div>
+
+    <div class="mt-3">
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+</form>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            var successMessage = '@successMessage';
+            if (successMessage) {
+                alert(successMessage);
+                setTimeout(function () {
+                    window.location.href = '@Url.Action("Index", "JobPost")';
+                });
+            }
+        });
+    </script>
+}

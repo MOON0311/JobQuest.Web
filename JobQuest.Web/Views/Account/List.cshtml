@@ -1,0 +1,70 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@model List<JobQuest.Web.Models.UserViewModel>
+
+@{
+    var successMessage = TempData["SuccessMessage"] as string;
+}
+
+<h1>Accounts</h1>
+
+<form asp-controller="Account" asp-action="List" method="get" class="form-inline">
+    <div class="form-group">
+        <input type="text" name="searchTerm" class="form-control" placeholder="Search by UserName" />
+    </div>
+    <div class="form-group">
+        <select name="role" class="form-control">
+            <option value="">User Role</option>
+            <option value="2">HR</option>
+            <option value="3">JobSeeker</option>
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Search</button>
+
+    <a asp-controller="Account" asp-action="RegisterForAdmin" class="btn btn-secondary ml-2">Register Account</a>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>UserID</th>
+            <th>UserName</th>
+            <th>FirstName</th>
+            <th>LastName</th>
+            <th>Role</th>
+            <th>Status</th>
+            <th> </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var account in Model)
+        {
+            <tr>
+                <td>@account.UserId</td>
+                <td>@account.UserName</td>
+                <td>@account.FirstName</td>
+                <td>@account.LastName</td>
+                <td>@account.RoleName</td>
+                <th>@account.Status</th>
+                <td>
+                    <a class="btn btn-primary" asp-controller="Account" asp-action="Edit" asp-route-id="@account.UserId">Edit</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            var successMessage = '@successMessage';
+            if (successMessage) {
+                alert(successMessage);
+            }
+        });
+    </script>
+}

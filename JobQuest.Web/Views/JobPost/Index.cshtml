@@ -1,0 +1,101 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@model List<JobQuest.Web.Models.JobPost>
+
+@{
+    var successMessage = TempData["SuccessMessage"] as string;
+}
+
+<h2>Job Listings</h2>
+
+<!-- Search and Filter Form -->
+<form asp-controller="JobPost" asp-action="Index" method="get" class="form-inline">
+    <div class="form-group">
+        <input type="text" name="searchTerm" class="form-control" placeholder="Search by Title or Description" />
+    </div>
+    <div class="form-group">
+        <select name="jobType" class="form-control">
+            <option value="">All Job Types</option>
+            <option value="FullTime">Full Time</option>
+            <option value="PartTime">Part Time</option>
+            <option value="Freelancer">Freelancer</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <select name="salaryType" class="form-control">
+            <option value="">Salary Type</option>
+            <option value="/Hour">Hourly</option>
+            <option value="/Annual">Annually</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <input type="number" name="minSalary" class="form-control" placeholder="Min Salary" />
+    </div>
+    <div class="form-group">
+        <input type="number" name="maxSalary" class="form-control" placeholder="Max Salary" />
+    </div>
+    <button type="submit" class="btn btn-primary">Search</button>
+</form>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Posts</title>
+    <link rel="stylesheet" href="~/css/styles.css"> <!-- Link your CSS file -->
+    <style>
+        /* Inline CSS for layout */
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        .box {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 10px;
+            width: calc(33.33% - 20px);
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        @foreach (var job in Model)
+        {
+            <div class="box">
+                <h2>@job.Title</h2>
+                <p>Company: <strong>@job.CompanyName</strong></p>
+                <p>@job.Description</p>
+                <p>@job.JobType</p>
+                <p>@job.Location</p>
+                <p><strong>@job.Salary</strong>@job.SalaryType</p>
+                <p><em>Posted on: @job.PostedDate.ToString("d")</em></p>
+                <p>
+                    <a class="btn btn-primary" asp-controller="Application" asp-action="Add" asp-route-id="@job.JobPostId">View Details</a>
+                </p>
+                @if (Context.Session.GetInt32("RoleId") == 1)
+                {
+                    <p>
+                        <a class="btn btn-primary" asp-controller="JobPost" asp-action="EditStatus" asp-route-id="@job.JobPostId">Edit</a>
+                    </p>
+                }
+            </div>
+        }
+    </div>
+</body>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            var successMessage = '@successMessage';
+            if (successMessage) {
+                alert(successMessage);
+            }
+        });
+    </script>
+}

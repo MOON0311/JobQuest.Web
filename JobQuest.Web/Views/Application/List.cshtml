@@ -1,0 +1,61 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@model List<JobQuest.Web.Models.Application>
+
+<h1>Applications</h1>
+
+@if (!Model.Any())
+{
+    <p>No Applications found.</p>
+}
+else
+{
+    var roleId = Context.Session.GetInt32("RoleId");
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ApplicationId</th>
+                <th>UserId</th>
+                <th>JobPostId</th>
+                <th>Resume</th>
+                <th>Status</th>
+                <th> </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var application in Model)
+            {
+                <tr>
+                    <td>@application.ApplicationId</td>
+                    <td>@application.UserId</td>
+                    <td>@application.JobPostId</td>
+                    <td>@application.ResumeFilePath</td>
+                    <td>@application.Status</td>
+                    @if (roleId == 3)
+                    {
+                        <td>
+                            <form method="post" asp-controller="Application" asp-action="Delete">
+                                <input type="hidden" name="ApplicationId" value="@application.ApplicationId" />
+                                <input type="hidden" name="UserId" value="@application.UserId" />
+                                <input type="hidden" name="JobPostId" value="@application.JobPostId" />
+                                <input type="hidden" name="ResumeFilePath" value="@application.ResumeFilePath" />
+
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
+                        </td>
+                    }
+                    else if (roleId == 2)
+                    {
+                        <td>
+                            <a class="btn btn-primary" asp-controller="Application" asp-action="Edit" asp-route-id="@application.ApplicationId">Edit</a>
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+}

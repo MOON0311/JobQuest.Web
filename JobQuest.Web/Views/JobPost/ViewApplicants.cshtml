@@ -1,0 +1,58 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@model List<JobQuest.Web.Models.ApplicationViewModel>
+
+<h2>Applicants for Job Post</h2>
+
+@if (!Model.Any())
+{
+    <p>No Applications found for this post.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Application ID</th>
+                <th>Applicant ID</th>
+                <th>Applicant Name</th>
+                <th>Resume</th>
+                <th>Application Date</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var applicant in Model)
+            {
+                <tr>
+                    <td>@applicant.ApplicationId</td>
+                    <td>@applicant.ApplicantId</td>
+                    <td>@applicant.ApplicantName</td>
+                    <td>
+                        <form method="get" asp-controller="Application" asp-action="Download">
+                            <input type="hidden" name="id" value="@applicant.ApplicationId" />
+                            <button type="submit">Download</button>
+                        </form>
+                    </td>
+                    <td>@applicant.ApplicationDate.ToString("g")</td>
+                    <td>@applicant.Status</td>
+                    <td>
+                        <form method="post" asp-controller="Application" asp-action="UpdateApplicationStatus">
+                            <input type="hidden" name="applicationId" value="@applicant.ApplicationId" />
+                            <select name="status" onchange="this.form.submit()">
+                                <option value="">Select Status</option>
+                                <option value="Accepted">Accepted</option>
+                                <option value="Rejected">Rejected</option>
+                            </select>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
