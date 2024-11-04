@@ -266,6 +266,9 @@ ServiceFabricBackup/
 *.ldf
 *.ndf
 
+# Ignore user secrets and sensitive config files
+appsettings.json
+
 # Business Intelligence projects
 *.rdl.data
 *.bim.layout
